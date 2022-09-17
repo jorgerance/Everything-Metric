@@ -59,16 +59,16 @@ const skipempty = '^(?:[ \n\t]+)?';
 var feetInchRegex;
 
 const units = [{
-    regexUnit: new RegExp(skipempty + '((°|º|deg(rees)?)[ \u00A0]?F(ahrenheits?)?|[\u2109])' + skipbrackets + regend, 'ig'),	
+    regexUnit: new RegExp(skipempty + '((°|º|deg(rees)?)[ \u00A0]?F(ahrenheits?)?|[\u2109])' + skipbrackets + regend, 'ig'),
 	unit: '°C',
 	multiplier: 1
 }, {
 	//(?!in ) exclude... replaced with
 	// (?:in )?  to exclude converting "born in 1948 in"
-	//old regex: new RegExp('((?:in )?[a-z#$€£\(]?' + intOrFloatNoFrac + unitfrac + sqcu + '[-− \u00A0]?in(ch|ches|²|³)?' + unitSuffixIn + ')', 'ig'), 
-	//added (?=[0-9]) otherwise it will match "it is in something"    
+	//old regex: new RegExp('((?:in )?[a-z#$€£\(]?' + intOrFloatNoFrac + unitfrac + sqcu + '[-− \u00A0]?in(ch|ches|²|³)?' + unitSuffixIn + ')', 'ig'),
+	//added (?=[0-9]) otherwise it will match "it is in something"
 	//regex: new RegExp('((?:in)?[a-z#$€£\(]?(?=[0-9¼½¾⅐⅑⅒⅓⅔⅕⅖⅗⅘⅙⅚⅛⅜⅝⅞])([\.,0-9]+(?![\/⁄]))?[-− \u00A0]?([¼½¾⅐⅑⅒⅓⅔⅕⅖⅗⅘⅙⅚⅛⅜⅝⅞]|[0-9]+[\/⁄][0-9]+)?([-− \u00A0]?(sq\.?|square|cu\.?|cubic))?[-− \u00A0]?(?:in(ch|ches|²|³)?)( [a-z]+)?'+unitSuffixIn+')', 'ig'),
-    regex: new RegExp('((?:in)?[a-z#$€£\(]?(?=[0-9¼½¾⅐⅑⅒⅓⅔⅕⅖⅗⅘⅙⅚⅛⅜⅝⅞])([\.,0-9]+(?![\/⁄]))?[-− \u00A0]?([¼½¾⅐⅑⅒⅓⅔⅕⅖⅗⅘⅙⅚⅛⅜⅝⅞]|[0-9]+[\/⁄][0-9]+)?([-− \u00A0]?(sq\.?|square|cu\.?|cubic))?[-− \u00A0]?(in(ch|ches|²|³)?[\)]?)( [a-z]+)?'+unitSuffixIn+')', 'ig'),
+    regex: new RegExp('((?:in)?[a-z#$€£\(]?(?=[0-9¼½¾⅐⅑⅒⅓⅔⅕⅖⅗⅘⅙⅚⅛⅜⅝⅞])([\.,0-9]+(?![\/⁄]))?[-− \u00A0]?([¼½¾⅐⅑⅒⅓⅔⅕⅖⅗⅘⅙⅚⅛⅜⅝⅞]|[0-9]+[\/⁄][0-9]+)?([-− \u00A0]?(sq\.?|square|cu\.?|cubic))?[-− \u00A0]?(in(ch|ches|²|³)?|pulgadas?[\)]?)( [a-z]+)?'+unitSuffixIn+')', 'ig'),
 	unit: 'cm',
 	unit2: 'mm',
 	multiplier: 2.54,
@@ -81,17 +81,17 @@ const units = [{
 	unit: 'm',
 	multiplier: 0.3048
 }, {
-	regex: new RegExp(regstart + intOrFloatNoFrac + unitfrac + sqcu + '[\-− \u00A0]?(feet|foot|ft)(²|³)?[\)]?' + unitSuffixft + ')', 'ig'),
+	regex: new RegExp(regstart + intOrFloatNoFrac + unitfrac + sqcu + '[\-− \u00A0]?(feet|foot|ft|pies?)(²|³)?[\)]?' + unitSuffixft + ')', 'ig'),
 	unit: 'm',
 	multiplier: 0.3048,
 	multipliercu: 28.31690879986443
 }, {
-	regex: new RegExp(regstart + intOrFloatNoFrac + unitfrac + sq + '[ \u00A0]?(mi|miles?)(²|³)?' + unitSuffix + ')', 'ig'),
+	regex: new RegExp(regstart + intOrFloatNoFrac + unitfrac + sq + '[ \u00A0]?(mi|miles?|millas?)(²|³)?' + unitSuffix + ')', 'ig'),
 	unit: 'km',
 	multiplier: 1.60934,
 	fullround: true
 }, {
-	regex: new RegExp(regstart + intOrFloatNoFrac + unitfrac + sq + '[ \u00A0]?(yards?|yd)(²|³)?' + unitSuffix + ')', 'ig'),
+	regex: new RegExp(regstart + intOrFloatNoFrac + unitfrac + sq + '[ \u00A0]?(yards?|yd|yardas?)(²|³)?' + unitSuffix + ')', 'ig'),
 	unit: 'm',
 	multiplier: 0.9144
 }, {
@@ -101,8 +101,8 @@ const units = [{
 	fullround: true,
 	forceround: true
 }, {
-	regexUnit: new RegExp(skipempty + '(pound|lb)s?' + skipbrackets + regend, 'ig'),
-	regex: new RegExp(regstart + intOrFloatNoFrac + unitfrac + '[ \u00A0\n]?(pound|lb)s?' + unitSuffix + ')', 'ig'),
+	regexUnit: new RegExp(skipempty + '(pound|lb|libra)s?' + skipbrackets + regend, 'ig'),
+	regex: new RegExp(regstart + intOrFloatNoFrac + unitfrac + '[ \u00A0\n]?(pound|lb|libra)s?' + unitSuffix + ')', 'ig'),
 	unit: 'kg',
 	unit2: 'g',
 	multiplier: 0.453592,
@@ -110,13 +110,13 @@ const units = [{
 	fullround: true
 }, {
 	regexUnit: new RegExp(skipempty + '(ounces?|oz)' + skipbrackets + regend, 'ig'),
-	regex: new RegExp(regstart + intOrFloatNoFrac + unitfrac + '[ \u00A0\n]?(ounces?|oz)' + unitSuffix + ')', 'ig'),
+	regex: new RegExp(regstart + intOrFloatNoFrac + unitfrac + '[ \u00A0\n]?(ounces?|oz|onzas?)' + unitSuffix + ')', 'ig'),
 	unit: 'g',
 	multiplier: 28.3495,
 	forceround: true
 }, {
 	regexUnit: new RegExp(skipempty + 'fl(uid)? ?(ounces?|oz)' + skipbrackets + regend, 'ig'),
-	regex: new RegExp(regstart + intOrFloatNoFrac + unitfrac + '[ \u00A0\n]?fl(uid)? ?(ounces?|oz)' + unitSuffix + ')', 'ig'),
+	regex: new RegExp(regstart + intOrFloatNoFrac + unitfrac + '[ \u00A0\n]?fl(uid)? ?(ounces?|oz|onzas?)' + unitSuffix + ')', 'ig'),
 	unit: 'mL',
 	multiplier: 29.5735,
 	forceround: true,
@@ -196,26 +196,26 @@ function procNode(textNode) {
 
 	let text = textNode.nodeValue;
 
-	if (text.startsWith('{') || text.length<1) 
+	if (text.startsWith('{') || text.length<1)
         return;
 
 	//skipping added for quantity and unit in separate blocks - after the number is found, sometimes next node is just a bunch of whitespace, like in cooking.nytimes, so we try again on the next node
-    
+
 	if (lastquantity !== undefined && lastquantity !== 0 && skips < 2) {
-		text = ParseUnitsOnly(text, foundDegreeSymbol);        
+		text = ParseUnitsOnly(text, foundDegreeSymbol);
 		if (/^[a-zA-Z°º]+$/g.test(text)) {
 			lastquantity = 0;
         }
 		else {
 			skips++;
-            if (/[°º]/g.test(text)) 
+            if (/[°º]/g.test(text))
 			     foundDegreeSymbol=true;
             else
                 foundDegreeSymbol=false;
-            
+
         }
         //console.log(text);
-	} else {        
+	} else {
 		lastquantity = 0;
 		if (text.length < 50) {
 			let quantity = StringToNumber(text);
@@ -223,7 +223,7 @@ function procNode(textNode) {
 			skips = 0;
 		}
 	}
-   if ((lastquantity !== undefined && lastquantity !== 0 && skips <= 2) || 
+   if ((lastquantity !== undefined && lastquantity !== 0 && skips <= 2) ||
         /[1-9¼½¾⅐⅑⅒⅓⅔⅕⅖⅗⅘⅙⅚⅛⅜⅝⅞]/g.test(text)) {
         text = AxAqq(text);
         if (includeQuotes)
@@ -252,7 +252,7 @@ function Fahrenheit(text) {
                 //console.log(matches[0]);
                 if (BracketsCheck(matches[0])) continue;
 				const fullMatch = matches[1];
-                
+
                 //for (var i=0; i<matches.length; i++)
 			    //console.log("matches " + i + " " + matches[i])
                 var imp1 = matches[4];
@@ -261,48 +261,48 @@ function Fahrenheit(text) {
                 var met1='';
                 var met2=0;
                 if (imp1!==undefined) { //is range
-                    if (matches[2]!==undefined) 
+                    if (matches[2]!==undefined)
                         met1 = convertToC(-imp1);
                     else
                         met1 = convertToC(imp1);
-                    
-                    
+
+
                     if (useKelvin) {
-                        met1 += 273.15; 
+                        met1 += 273.15;
                         met1 = roundNicely(met1);
                     }
-                    
+
                     met1 = replaceWithComma(met1);
                 }
-                
+
                 if ((/[\-−]/.test(imp2.charAt(0))) ||
                     (imp1===undefined && matches[2]!==undefined)){
 				    met2 = convertToC(-imp2);
-			     } else 
+			     } else
                      met2 = convertToC(imp2);
-                
+
                 /*if (matches[3]!==undefined) { //is range
-                    if (matches[2]!==undefined) 
+                    if (matches[2]!==undefined)
                         met1 = -convertToC(imp);
                     else
                         met1 = convertToC(imp);
                 }*/
-                
-                
+
+
                 if (useKelvin) {
-                    met2 += 273.15;   
+                    met2 += 273.15;
                     unit = 'K';
                     met2 = roundNicely(met2);
                 }
-                
+
                 met2 = replaceWithComma(met2);
-				
+
 				var met='';
                 if (imp1!==undefined)
                     met = met1 + ' to ';
                 met += met2;
 
-				const insertIndex = GetIndexPos(matches.index, fullMatch);				
+				const insertIndex = GetIndexPos(matches.index, fullMatch);
 				const metStr = prepareForOutput(met, unit, false);
 				text = insertAt(text, metStr, insertIndex);
 			} catch (err) {
@@ -326,10 +326,10 @@ function mpg2Lper100km(text) {
                 //console.log(matches[0]);
                 if (BracketsCheck(matches[0])) continue;
 				const fullMatch = matches[1];
-                
+
                 //for (var i=0; i<matches.length; i++)
 			    //console.log("matches " + i + " " + matches[i])
-				
+
 				var imp = matches[2];
 				if (imp !== undefined) {
 					imp = imp.replace(',', '');
@@ -338,11 +338,11 @@ function mpg2Lper100km(text) {
 				imp = parseFloat(imp);
 
 				if (imp === 0 || isNaN(imp)) continue;
-				var l = 235.214583 / imp; // 100 * 3.785411784 / 1.609344 * imp;   
+				var l = 235.214583 / imp; // 100 * 3.785411784 / 1.609344 * imp;
 				var met = convert(l, 1, false);
-				//met = replaceWithComma(met);                
+				//met = replaceWithComma(met);
 
-				const insertIndex = GetIndexPos(matches.index, fullMatch);				
+				const insertIndex = GetIndexPos(matches.index, fullMatch);
 				const metStr = prepareForOutput(met, '\u00A0L\/100\u00A0km', false);
 				text = insertAt(text, metStr, insertIndex);
 			} catch (err) {
@@ -354,19 +354,19 @@ function mpg2Lper100km(text) {
 }
 
 function GetIndexPos(index, fullMatch) {
-    let insertIndex = index + fullMatch.length; 
+    let insertIndex = index + fullMatch.length;
     let lastchar = fullMatch[fullMatch.length -1];
-    if (/[\s \.,;]/.test(lastchar)) 
+    if (/[\s \.,;]/.test(lastchar))
         insertIndex--;
     return insertIndex;
 }
 
 function CleanReplace(text, match, metStr) {
-    let lastchar = match[match.length -1];   
+    let lastchar = match[match.length -1];
     //console.log("replacing " + match + " with " + metStr + /[^a-z"″”“’'′]/i.test(lastchar));
-     
-    //if (/[\s \.,;\)]/.test(lastchar)) 
-    if (/[^a-z"″”“’'′]/i.test(lastchar)) 
+
+    //if (/[\s \.,;\)]/.test(lastchar))
+    if (/[^a-z"″”“’'′]/i.test(lastchar))
         return text.replace(match, metStr + lastchar);
     else
         return text.replace(match, metStr);
@@ -393,14 +393,14 @@ function processAll(text) {
 				try {
 
 					//includes a bracket, it is probably already converted. ex: 1 in (2.54 cm)
-                   
+
 					if (BracketsCheck(matches[0])) continue;
 
 					if ((matches[2] !== undefined) && (/(?:^|\s)([-−]?\d*\.?\d+|\d{1,3}(?:,\d{3})*(?:\.\d+)?)(?!\S)/g.test(matches[2]) === false)) continue;
 
 					let subtract = 0;
 					if (i == 1) { //in
-						//if (/[a-z#$€£]/i.test(matches[1].substring(0,1)))                      
+						//if (/[a-z#$€£]/i.test(matches[1].substring(0,1)))
 						if (/^[a-z#$€£]/i.test(matches[0]))
 							continue;
 						if (/^in /i.test(matches[0])) //born in 1948 in ...
@@ -433,7 +433,7 @@ function processAll(text) {
 					let suffix = '';
 
 					//if (/[\(\)]/.test(matches[0])) continue;
-                    
+
 					const fullMatch = matches[1];
 					var imp = matches[2];
 
@@ -450,7 +450,7 @@ function processAll(text) {
 					//console.log("imp " + imp);
 					if (isNaN(imp))
 						imp = 0;
-                    
+
                     if (i == 1 && / in /i.test(matches[0]) && imp > 1000)
 							continue; //prevents 1960 in Germany
 
@@ -469,11 +469,11 @@ function processAll(text) {
 						suffix = '²';
 					else if (((typeof(matches[5]) !== 'undefined') && matches[5].toLowerCase().indexOf('cu') !== -1))
 						suffix = '³';
-                    
-                    
+
+
 					const metStr = convAndForm(imp, i, suffix);
 
-					let insertIndex = GetIndexPos(matches.index, fullMatch);	
+					let insertIndex = GetIndexPos(matches.index, fullMatch);
 					insertIndex = insertIndex - subtract; //subtracts behind bracket
 					text = insertAt(text, metStr, insertIndex);
 
@@ -490,11 +490,11 @@ function processAll(text) {
 function addFraction(frac) {
 	if (fractions[frac] === undefined) {
 		try {
-			if (/[a-zA-Z,\?\!]/.test(frac)) 
+			if (/[a-zA-Z,\?\!]/.test(frac))
                 return 0;
 			let cleanedFrac = frac.replace(/[^\d\/⁄]/, '');
 			cleanedFrac = frac.replace(/[⁄]/, '\/');
-			if (cleanedFrac.length < 3) 
+			if (cleanedFrac.length < 3)
                 return 0;
 			return eval(cleanedFrac);
 		} catch (err) {
@@ -547,7 +547,7 @@ function convAndForm(imp, unitIndex, suffix) {
 		met = 1;
 		unit = 'm';
 	}
-	
+
 	return prepareForOutput(met, spc + unit + suffix, false);
 }
 
@@ -703,7 +703,7 @@ function roundNicely(v) {
 
 function convertToC(f) {
 	let met = (5 / 9) * (f - 32);
-    if (useKelvin) 
+    if (useKelvin)
        return met;
     else
 	   return Math.round(met);
@@ -726,7 +726,7 @@ function AxAxAin(text) {
 			try {
 				const fullMatch = matches[1];
                 if (BracketsCheck(matches[0])) continue;
-                
+
 				let scale = 2.54;
 				let unit = spc + "cm";
 				if (useMM === true) {
@@ -738,8 +738,8 @@ function AxAxAin(text) {
 				let cm3 = replaceWithComma(roundNicely(matches[6] * scale));
 
 
-				const insertIndex = GetIndexPos(matches.index, fullMatch);	
-				const metStr = prepareForOutput(cm1 + spc + "×" + spc + cm2 + spc + "×" + spc + cm3, spc + unit, true);				
+				const insertIndex = GetIndexPos(matches.index, fullMatch);
+				const metStr = prepareForOutput(cm1 + spc + "×" + spc + cm2 + spc + "×" + spc + cm3, spc + unit, true);
 
 				//text = text.replace(matches[0], metStr);
                 text = CleanReplace(text, matches[0], metStr);
@@ -774,32 +774,32 @@ function AxAqq(text) {//ikea US
 			let frac1 = (matches[4]);
 			frac1 = addFraction(frac1);
 			if (isNaN(frac1)) continue;
-                        
+
             let inches2 = parseFloat(matches[6]);
 			if (isNaN(inches2)) inches2 = 0;
 
 			let frac2 = (matches[7]);
 			frac2 = addFraction(frac2);
 			if (isNaN(frac2)) continue;
-            
+
             //console.log( inches1 + " " + frac1 + " " + inches2 + " " + frac2);
-			
+
             inches1 = inches1+frac1;
             inches2 = inches2+frac2;
-            
+
             let scale = 2.54;
             let unit = spc + "cm";
             if (useMM === true) {
                 scale = 25.4;
                 unit = spc + "mm"
             }
-            
+
 			let cm1 = replaceWithComma(roundNicely(inches1 * scale));
 			let cm2 = replaceWithComma(roundNicely(inches2 * scale));
 
 
-            const insertIndex = GetIndexPos(matches.index, fullMatch);	
-            const metStr = prepareForOutput(cm1 + spc + "×" + spc + cm2, spc + unit, true);				
+            const insertIndex = GetIndexPos(matches.index, fullMatch);
+            const metStr = prepareForOutput(cm1 + spc + "×" + spc + cm2, spc + unit, true);
 
             //text = text.replace(matches[0], metStr);
             text = CleanReplace(text, matches[0], metStr);
@@ -825,7 +825,7 @@ function AxAin(text) {
 
 				const fullMatch = matches[1];
 				if (/[0-9][Xx\*×][ \u00A0][0-9]/.test(fullMatch))
-					continue; //it is 2x 2in something so no conversion                
+					continue; //it is 2x 2in something so no conversion
 				if (BracketsCheck(matches[0])) continue;
 
 				let scale = 2.54;
@@ -837,7 +837,7 @@ function AxAin(text) {
 				let cm1 = replaceWithComma(roundNicely(matches[2] * scale));
 				let cm2 = replaceWithComma(roundNicely(matches[4] * scale));
 
-				const insertIndex = GetIndexPos(matches.index, fullMatch);					
+				const insertIndex = GetIndexPos(matches.index, fullMatch);
 				const metStr = prepareForOutput(cm1 + spc + "x" + spc + cm2, spc + unit, true); //+ behind bracket
 
 				//text = text.replace(matches[0], metStr);
@@ -863,7 +863,7 @@ function AxAft(text) {
 			try {
 				const fullMatch = matches[1];
 				if (/[0-9][xX\*×][ \u00A0][0-9]/.test(fullMatch))
-					continue; //it is 2x 2ft something so no conversion    
+					continue; //it is 2x 2ft something so no conversion
 				if (BracketsCheck(matches[0])) continue;
 
 				let scale = 0.3048;
@@ -872,9 +872,9 @@ function AxAft(text) {
 				let m1 = replaceWithComma(roundNicely(matches[2] * scale));
 				let m2 = replaceWithComma(roundNicely(matches[4] * scale));
 
-				const insertIndex = GetIndexPos(matches.index, fullMatch);	
+				const insertIndex = GetIndexPos(matches.index, fullMatch);
 				const metStr = prepareForOutput(m1 + spc + "×" + spc + m2, spc + unit, true);
-				
+
 				//text = text.replace(matches[0], metStr);
                 text = CleanReplace(text, matches[0], metStr);
 			} catch (err) {
@@ -894,7 +894,7 @@ function hasNumber(myString) {
 //1' 2"
 function feetInch(text) {
 
-	/*let regex = new RegExp('([°º]? ?(([0-9]{0,3})[\'’′][\-− \u00A0]?)?(([\.0-9]+(?!\/)(\.[0-9]+)?)?[\-− \u00A0]?([^ a-z,\?\.\!\]]|[0-9]+[\/⁄][0-9\.]+)?)? ?("|″|”|“|’’|\'\'|′′)'+unitSuffix+')|(["″”“\n])', 'g');  from v3.1*/ 
+	/*let regex = new RegExp('([°º]? ?(([0-9]{0,3})[\'’′][\-− \u00A0]?)?(([\.0-9]+(?!\/)(\.[0-9]+)?)?[\-− \u00A0]?([^ a-z,\?\.\!\]]|[0-9]+[\/⁄][0-9\.]+)?)? ?("|″|”|“|’’|\'\'|′′)'+unitSuffix+')|(["″”“\n])', 'g');  from v3.1*/
 
     //let regex = new RegExp('([°ºa-z]?( {0,1}([0-9]{1,3})[\'’′][\-− \u00A0]?)?(([\.0-9]+(?!\/)(?:[\-− \u00A0]?))?([¼½¾⅐⅑⅒⅓⅔⅕⅖⅗⅘⅙⅚⅛⅜⅝⅞]|[0-9]+[\/⁄][0-9\.]+)?)? ?("|″|”|“|’’|\'\'|′′)(?! [\(][0-9]| ?\u200B\u3010)([^a-z]|$))|(\d["″”“\n])', 'g');
     //(\d?["″”“\n]) is here if there is a quote we want to match it but if the number is in front then it was one of the discarded matches from above
@@ -917,17 +917,17 @@ function feetInch(text) {
 	let lastQuoteOpen = false;
 	while ((matches = feetInchRegex.exec(text)) !== null) {
 		try {
-            
+
             /*console.log(lastQuoteOpen);
 			for (var i=0; i<matches.length; i++)
 			    console.log("matches " + i + " " + matches[i]);
             console.log("------------------");*/
 			const fullMatch = matches[1];
-            
+
             if (includeImproperSymbols) {
-                
+
                 if (lastQuoteOpen) {
-                    lastQuoteOpen = false; 
+                    lastQuoteOpen = false;
                     continue;
                     }
 
@@ -937,12 +937,12 @@ function feetInch(text) {
                 }
 
                 if (!hasNumber(matches[1]) && !/[¼½¾⅐⅑⅒⅓⅔⅕⅖⅗⅘⅙⅚⅛⅜⅝⅞]/g.test(matches[1])) {
-                    lastQuoteOpen = !lastQuoteOpen; 
+                    lastQuoteOpen = !lastQuoteOpen;
                     continue;
                 }
             }
-            
-        
+
+
             if (BracketsCheck(matches[0])) continue;
 
 			/*if (/“/.test(fullMatch)) {
@@ -960,7 +960,7 @@ function feetInch(text) {
 			}*/
 
 			//if (/[\(]/.test(matches[9])) continue;
-            
+
 			if (/[°º]/.test(fullMatch.charAt(0))) {
 				continue;
 			}
@@ -973,12 +973,12 @@ function feetInch(text) {
 
 			let feet = parseFloat(matches[4]);
 			if (isNaN(feet)) feet = 0;
-                
+
 			let inches = matches[7];
             if (inches!==undefined && inches.length<5) //someone used , instead of . for decimals
                 inches=inches.replace(',', '.');
-            
-            
+
+
 			/*if (/[⁄]/.test(matches[5])) { //improvisation, but otherwise 1⁄2 with register 1 as in
 				matches[7] = matches[5];
 				inches = 0;
@@ -989,7 +989,7 @@ function feetInch(text) {
 
 			if (matches[8] !== undefined)
 				inches += addFraction(matches[8]);
-            
+
 
 			if (inches === 0 || isNaN(inches)) continue;
 
@@ -1000,8 +1000,8 @@ function feetInch(text) {
 				metStr = convAndForm(feet + inches / 12, 2, ''); //2 feet
 			else
 				metStr = convAndForm(feet * 12 + inches, 1, ''); //1 inch
-			const insertIndex = GetIndexPos(matches.index, fullMatch);	
-            
+			const insertIndex = GetIndexPos(matches.index, fullMatch);
+
 			text = insertAt(text, metStr, insertIndex);
 
 		} catch (err) {
@@ -1011,9 +1011,9 @@ function feetInch(text) {
 	return text;
 }
 
-//1 ft 2 in 
+//1 ft 2 in
 function ftin2m(text) {
-	let regex = new RegExp('(([0-9]{0,3}).?(ft|yd|foot|feet).?([0-9]+(\.[0-9]+)?).?in(ch|ches)?)', 'g');
+	let regex = new RegExp('(([0-9]{0,3}).?(ft|yd|foot|feet).?([0-9]+(\.[0-9]+)?).?in(ch|ches|pulgadas?)?)', 'g');
 	if (text.search(regex) !== -1) {
 		let matches;
 
@@ -1082,7 +1082,7 @@ function StringToNumber(text) {
 		try {
 			if (matches[1] === undefined && matches[2] === undefined)
 				continue;
-			let imp = matches[1]; //.replace(',','');  
+			let imp = matches[1]; //.replace(',','');
 			//console.log("found:"+matches[1]);
 			if (matches[1] !== undefined) {
 				imp = imp.replace(',', '');
@@ -1105,7 +1105,7 @@ function StringToNumber(text) {
 			if (imp === 0 || isNaN(imp)) continue;
 			return imp;
 		} catch {
-			//console.log(err.message);            
+			//console.log(err.message);
 		}
 	}
 }
@@ -1124,33 +1124,33 @@ function ParseUnitsOnly(text) {
 
 				const metStr = convAndForm(lastquantity, i, "");
 				const fullMatch = matches[0];
-				const insertIndex = GetIndexPos(matches.index, fullMatch);	
+				const insertIndex = GetIndexPos(matches.index, fullMatch);
 
 				text = insertAt(text, metStr, insertIndex);
 
 			} catch (err) {
 				//console.log(err.message);
 			}
-		}        
+		}
 
 	}
 
     if (foundDegreeSymbol) {
             if ( text.charAt(0)!=='F')
                 return text;
-        
-            if (text.length>=3 && /^F\u200B\u3010|^F[\(][0-9]/.test(text)) 
+
+            if (text.length>=3 && /^F\u200B\u3010|^F[\(][0-9]/.test(text))
                 return text; //it has been already converted
-            
+
                 let met = convertToC(lastquantity);
-                
+
                 var unit = '°C';
                 if (useKelvin) {
-                    met += 273.15;   
+                    met += 273.15;
                     unit = 'K';
                     met = roundNicely(met);
-                } 
-            
+                }
+
             met = replaceWithComma(met);
             const metStr = prepareForOutput(met, unit, false);
             text = insertAt(text, metStr, 1);
@@ -1178,14 +1178,14 @@ function addBrackets(text) {
 }
 
 function prepareForOutput(number, rest, commaReplaced) {
-    totalConversions++;   
+    totalConversions++;
 	if (commaReplaced === false)
 		number = replaceWithComma(number)
 	if (rest === undefined)
 		rest = '';
 	let fullstring = number + rest;
     fullstring = addBrackets(fullstring);
-	fullstring = bold(fullstring);	
+	fullstring = bold(fullstring);
 	return fullstring;
 }
 
@@ -1203,32 +1203,32 @@ function replaceWithComma(mystring) {
 		return mystring.toLocaleString('de-DE');
 
 }
-        
-function FlashMessage() {   
-    var div  = document.getElementById("EverythingMetricExtension"); 
+
+function FlashMessage() {
+    var div  = document.getElementById("EverythingMetricExtension");
     if (div===null)
         div = document.createElement('div');
     div.setAttribute("id", "EverythingMetricExtension");
     div.textContent = 'Converted to Metric!';
-    
+
     document.body.appendChild(div);
     var x = document.getElementById("EverythingMetricExtension");
     x.className = "show";
     setTimeout(function(){ x.className = x.className.replace("show", ""); }, 1500);
 }
-        
+
 function InitRegex(){
-    
-    if (includeImproperSymbols) {        
+
+    if (includeImproperSymbols) {
         feetInchRegex = new RegExp('(([°º]?([ \u00A0a-z]{0,1}([0-9]{1,3})[\'’′][\-− \u00A0]?)?((([\.,0-9]+)(?!\/)(?:[\-− \u00A0]?))?([¼½¾⅐⅑⅒⅓⅔⅕⅖⅗⅘⅙⅚⅛⅜⅝⅞]|[0-9]+[\/⁄][0-9\.]+)?)?[ \u00A0]?(\"|″|”|“|’’|\'\'|′′))|(["″”“\n]))(?! [\(][0-9]| ?\u200B\u3010)', 'gi');
     }
     else {
         feetInchRegex = new RegExp('(([°º]?([ \u00A0a-z]{0,1}([0-9]{1,3})[′][\-− \u00A0]?)?((([\.,0-9]+)(?!\/)(?:[\-− \u00A0]?))?([¼½¾⅐⅑⅒⅓⅔⅕⅖⅗⅘⅙⅚⅛⅜⅝⅞]|[0-9]+[\/⁄][0-9\.]+)?)?[ \u00A0]?(″|′′)))(?! [\(][0-9]| ?\u200B\u3010)', 'gi');
-        
+
         //only for foot
         units[2].regex = new RegExp('([\(]?[°º]?[ \u00A0]?' + intOrFloatNoFrac + unitfrac + '[\-− \u00A0]?([′])(?![′])' + unitSuffixft + ')', 'g');
-    }   
-}        
+    }
+}
 
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -1266,18 +1266,18 @@ document.addEventListener('DOMContentLoaded', function() {
             includeImproperSymbols = response.includeImproperSymbols;
 			InitRegex();
 			if (response.metricIsEnabled === true) {
-                
+
 				let isamazon = false;
 				if (/\.amazon\./.test(window.location.toString())) isamazon = true;
 				if (/\.uk\//.test(window.location.toString())) isUK = true;
                 if (isamazon) {
-                    var div = document.getElementById("AmazonMetricHelper"); 
+                    var div = document.getElementById("AmazonMetricHelper");
                     if (div===null)
                         div = document.createElement('div');
                     else
                         return;
                     div.setAttribute("id", "EverythingMetricExtension");
-                    div.textContent = 'Converted to Metric!';    
+                    div.textContent = 'Converted to Metric!';
                     document.body.appendChild(div);
                 }
                 isparsing=true;
@@ -1287,7 +1287,7 @@ document.addEventListener('DOMContentLoaded', function() {
 					initMO(document.body);
 			}
 		}
-	); 
+	);
 }, false);
 /*
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
@@ -1298,13 +1298,13 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     }
     sendResponse();
 });
-        
+
 */
-        
-        
+
+
 chrome.runtime.onMessage.addListener(
   function(request, sender, sendResponse) {
-    
+
     if (request.command == "parse_page_now") {
         if (isparsing===true)
             return;
@@ -1320,7 +1320,7 @@ function hasParentEditableNode(el) {
 	while (el.parentNode) {
 		el = el.parentNode;
 
-		if (hasEditableNode(el)) 
+		if (hasEditableNode(el))
             return true;
 	}
 	return false;
